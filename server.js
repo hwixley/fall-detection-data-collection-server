@@ -32,13 +32,19 @@ app.post("/create", (req, res) => {
     })
 })
 
-// URL: http://IPv4:port/create
-var server = app.listen(8081, "192.168.10.114", () => {
-    console.log("Server is running!")
-})
-
 // DELETE
 
 // UPDATE
 
 // FETCH
+app.get("/fetch", (req, res) => {
+    Data.find({}).then((DBitems) => {
+        res.send(DBitems)
+    })
+})
+
+
+// http://IPv4:port/create
+var server = app.listen(8081, "192.168.10.114", () => {
+    console.log("Server is running!")
+})
