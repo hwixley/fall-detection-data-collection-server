@@ -3,7 +3,7 @@ const mongoose = require("mongoose")
 var app = express()
 var Data = require("./sampleSchema")
 
-mongoose.connect("mongoDB://localhost/fddg")
+mongoose.connect("mongodb://127.0.0.1/fddg")
 
 mongoose.connection.once("open", () => {
     console.log("Connected to fddg DB!")

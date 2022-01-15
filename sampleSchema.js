@@ -3,12 +3,10 @@ var Schema = mongoose.Schema
 
 var sample = new Schema({
     subjectID: String,
-    p_ecg: Float32Array,
-    p_acc_x: Float32Array,
-    p_acc_y: Float32Array,
-    p_acc_z: Float32Array,
-
-
+    p_ecg: String,
+    p_acc_x: String,
+    p_acc_y: String,
+    p_acc_z: String
 })
 
 const data = mongoose.model("data", sample)
