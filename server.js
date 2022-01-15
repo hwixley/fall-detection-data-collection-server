@@ -14,7 +14,7 @@ mongoose.connection.once("open", () => {
 
 // CREATE
 app.post("/create", (req, res) => {
-    var sample = new Data ({
+    var sample = new Data({
         subjectID: req.get("subjectID"),
         p_ecg: req.get("p_ecg"),
         p_acc_x: req.get("p_acc_x"),

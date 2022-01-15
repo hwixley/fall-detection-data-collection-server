@@ -9,6 +9,6 @@ var sample = new Schema({
     p_acc_z: String
 })
 
-const data = mongoose.model("data", sample)
+const Data = mongoose.model("Data", sample)
 
-module.export = data
+module.exports = Data
