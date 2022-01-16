@@ -33,8 +33,32 @@ app.post("/create", (req, res) => {
 })
 
 // DELETE
+app.post("/delete", (req, res) => {
+     Data.findOneAndRemove({
+         _id: req.get("id")
+     }, (err) => {
+         console.log("Failed to delete " + err)
+     })
+
+     res.send("Deleted!")
+})
 
 // UPDATE
+app.post("/update", (req, res) => {
+    Data.findOneAndUpdate({
+        _id: req.get("id")
+    }, {
+        subjectID: req.get("subjectID"),
+        p_ecg: req.get("p_ecg"),
+        p_acc_x: req.get("p_acc_x"),
+        p_acc_y: req.get("p_acc_y"),
+        p_acc_z: req.get("p_acc_z") 
+    }, (err) => {
+        console.log("Failed to update " + err)
+    })
+
+    res.send("Updated!")
+})
 
 // FETCH
 app.get("/fetch", (req, res) => {
