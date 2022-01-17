@@ -49,6 +49,28 @@ app.post("/createRecording", (req, res) => {
             res.send("Saved data!")
         } else {
             console.log("Failure to save data")
+            res.send("Fauked to save data")
+        }
+    })
+})
+
+app.post("/createUser", (req, res) => {
+    var user = new User({
+        name: req.get("name"),
+        age: req.get("age"),
+        height: req.get("height"),
+        weight: req.get("weight"),
+        is_female: req.get("is_female"),
+        medical_conditions: req.get("medical_conditions")
+    })
+
+    sample.save().then(() => {
+        if (sample.isNew == false) {
+            console.log("Saved data!")
+            res.send("Saved data!")
+        } else {
+            console.log("Failure to save data")
+            res.send("Failed to save data")
         }
     })
 })
