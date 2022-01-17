@@ -47,10 +47,10 @@ app.post("/createRecording", (req, res) => {
     recording.save().then(() => {
         if (recording.isNew == false) {
             console.log("Saved data!")
-            res.send("Saved data!")
+            res.send(recording._id)
         } else {
             console.log("Failure to save data")
-            res.send("Fauked to save data")
+            res.send("failure")
         }
     })
 })
@@ -68,10 +68,10 @@ app.post("/createUser", (req, res) => {
     user.save().then(() => {
         if (user.isNew == false) {
             console.log("Saved data!")
-            res.send("Saved data!")
+            res.send(user._id)
         } else {
             console.log("Failure to save data")
-            res.send("Failed to save data")
+            res.send("failure")
         }
     })
 })
