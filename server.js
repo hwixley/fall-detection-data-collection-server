@@ -1,8 +1,9 @@
 const express = require("express")
 const mongoose = require("mongoose")
 const Recording = require("./recordingSchema")
+const User = require("./userSchema")
 var app = express()
-var Data = require("./sampleSchema")
+
 
 mongoose.connect("mongodb://127.0.0.1/fddg")
 
