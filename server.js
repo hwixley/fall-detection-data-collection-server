@@ -46,10 +46,10 @@ app.post("/createRecording", (req, res) => {
 
     recording.save().then(() => {
         if (recording.isNew == false) {
-            console.log("Saved data!")
+            console.log("Successfully saved!")
             res.send(recording._id)
         } else {
-            console.log("Failure to save data")
+            console.log("Failed to save")
             res.send("failure")
         }
     })
@@ -67,10 +67,10 @@ app.post("/createUser", (req, res) => {
 
     user.save().then(() => {
         if (user.isNew == false) {
-            console.log("Saved data!")
+            console.log("Successfully saved!")
             res.send(user._id)
         } else {
-            console.log("Failure to save data")
+            console.log("Failed to save")
             res.send("failure")
         }
     })
@@ -107,11 +107,37 @@ app.post("/updateRecording", (req, res) => {
         att_yaw: req.get("att_yaw"),
         delta_heading: req.get("delta_heading")
     }, (err) => {
-        console.log("Failed to update " + err)
+        if (err != null) {
+            console.log("Failed to update " + err)
+        } else {
+            console.log("Successfully updated!")
+        }
     })
 
     res.send("Updated!")
 })
+
+app.post("/updateUser", (req, res) => {
+    User.findOneAndUpdate({
+        _id: req.get("id")
+    }, {
+        name: req.get("name"),
+        age: req.get("age"),
+        height: req.get("height"),
+        weight: req.get("weight"),
+        is_female: req.get("is_female"),
+        medical_conditions: req.get("medical_conditions")
+    }, (err) => {
+        if (err != null) {
+            console.log("Failed to update " + err)
+        } else {
+            console.log("Successfully updated!")
+        }
+    })
+
+    res.send("Updated!")
+})
+
 
 // FETCH
 app.get("/fetchRecordings", (req, res) => {
@@ -120,12 +146,37 @@ app.get("/fetchRecordings", (req, res) => {
     })
 })
 
+app.get("/fetchUsers", (req, res) => {
+    User.find({}).then((DBitems) => {
+        res.send(DBitems)
+    })
+})
+
+
 // DELETE
 app.post("/deleteRecording", (req, res) => {
     Recording.findOneAndRemove({
         _id: req.get("id")
     }, (err) => {
-        console.log("Failed to delete " + err)
+        if (err != null) {
+            console.log("Failed to delete " + err)
+        } else {
+            console.log("Successfully deleted!")
+        }
+    })
+
+    res.send("Deleted!")
+})
+
+app.post("/deleteUser", (req, res) => {
+    Recording.findOneAndRemove({
+        _id: req.get("id")
+    }, (err) => {
+        if (err != null) {
+            console.log("Failed to delete " + err)
+        } else {
+            console.log("Successfully deleted!")
+        }
     })
 
     res.send("Deleted!")
