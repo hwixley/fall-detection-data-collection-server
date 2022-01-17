@@ -120,10 +120,9 @@ app.get("/fetchRecordings", (req, res) => {
     })
 })
 
-/*
 // DELETE
-app.post("/delete", (req, res) => {
-    Data.findOneAndRemove({
+app.post("/deleteRecording", (req, res) => {
+    Recording.findOneAndRemove({
         _id: req.get("id")
     }, (err) => {
         console.log("Failed to delete " + err)
@@ -131,7 +130,7 @@ app.post("/delete", (req, res) => {
 
     res.send("Deleted!")
 })
-*/
+
 
 // http://IPv4:port/create
 var server = app.listen(8081, "172.20.10.6", () => {
