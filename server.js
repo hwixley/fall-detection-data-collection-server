@@ -169,7 +169,7 @@ app.post("/deleteRecording", (req, res) => {
 })
 
 app.post("/deleteUser", (req, res) => {
-    Recording.findOneAndRemove({
+    User.findOneAndRemove({
         _id: req.get("id")
     }, (err) => {
         if (err != null) {
@@ -184,6 +184,6 @@ app.post("/deleteUser", (req, res) => {
 
 
 // http://IPv4:port/create
-var server = app.listen(8081, "172.20.10.6", () => {
+var server = app.listen(8081, "192.168.8.171", () => {
     console.log("Server is running!")
 })
