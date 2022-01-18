@@ -153,6 +153,21 @@ app.get("/fetchUsers", (req, res) => {
 })
 
 
+// QUERY
+app.get("/fetchUser", (req, res) => {
+    User.findById({
+        _id: req.get("id")
+    }, (err, user) => {
+        if (err != null) {
+            console.log("Failed to /fetchUser: " + err)
+        } else {
+            console.log("Successfully fetched user!")
+            res.send(user)
+        }
+    })
+})
+
+
 // DELETE
 app.post("/deleteRecording", (req, res) => {
     Recording.findOneAndRemove({
