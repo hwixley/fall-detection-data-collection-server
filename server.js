@@ -4,6 +4,9 @@ const Recording = require("./recordingSchema")
 const User = require("./userSchema")
 var app = express()
 
+const ip = "192.168.8.160"
+const port = 8081
+
 
 mongoose.connect("mongodb://127.0.0.1/fddg")
 
@@ -155,8 +158,8 @@ app.get("/fetchUsers", (req, res) => {
 
 // QUERY
 app.get("/fetchUser", (req, res) => {
-    User.findById({
-        _id: req.get("id")
+    User.find({
+        subject_id: req.get("subject_id")
     }, (err, user) => {
         if (err != null) {
             console.log("Failed to /fetchUser: " + err)
@@ -165,6 +168,17 @@ app.get("/fetchUser", (req, res) => {
             res.send(user)
         }
     })
+
+    /*User.findById({
+        _id: req.get("id")
+    }, (err, user) => {
+        if (err != null) {
+            console.log("Failed to /fetchUser: " + err)
+        } else {
+            console.log("Successfully fetched user!")
+            res.send(user)
+        }
+    })*/
 })
 
 
@@ -199,6 +213,6 @@ app.post("/deleteUser", (req, res) => {
 
 
 // http://IPv4:port/create
-var server = app.listen(8081, "192.168.8.171", () => {
+var server = app.listen(port, ip, () => {
     console.log("Server is running!")
 })
