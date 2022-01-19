@@ -8,6 +8,7 @@ var app = express()
 const ip = "192.168.8.160"
 const port = 8081
 
+app.use(bodyParser.json({limit: '50mb'}))
 
 var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
@@ -37,6 +38,7 @@ app.post("/createRecording", jsonParser, (req, res) => {
         p_hr_rssms: req.body.p_hr_rssms,
         p_hr_rss_peak: req.body.p_hr_rss_peak,
         p_hr_rssms_peak: req.body.p_hr_rssms_peak,
+        p_contact: req.body.p_contact,
         p_acc_x: req.body.p_acc_x,
         p_acc_y: req.body.p_acc_y,
         p_acc_z: req.body.p_acc_z,

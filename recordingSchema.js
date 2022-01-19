@@ -16,6 +16,7 @@ var recording = new Schema({
     p_hr_rrsms: [Number],
     p_hr_rrs_peak: [Number],
     p_hr_rrsms_peak: [Number],
+    p_contact: [Number],
     p_acc_x: [Number],
     p_acc_y: [Number],
     p_acc_z: [Number],
