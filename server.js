@@ -1,5 +1,6 @@
 const express = require("express")
 const mongoose = require("mongoose")
+var bodyParser = require("body-parser")
 const Recording = require("./recordingSchema")
 const User = require("./userSchema")
 var app = express()
@@ -7,6 +8,9 @@ var app = express()
 const ip = "192.168.8.160"
 const port = 8081
 
+
+var jsonParser = bodyParser.json()
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 mongoose.connect("mongodb://127.0.0.1/fddg")
 
@@ -58,14 +62,16 @@ app.post("/createRecording", (req, res) => {
     })
 })
 
-app.post("/createUser", (req, res) => {
+app.post("/createUser", jsonParser, (req, res) => {
+    console.log(req.body)
     var user = new User({
-        name: req.get("name"),
-        age: req.get("age"),
-        height: req.get("height"),
-        weight: req.get("weight"),
-        is_female: req.get("is_female"),
-        medical_conditions: req.get("medical_conditions")
+        subject_id: req.body.subject_id,
+        name: req.body.name,
+        age: req.body.age,
+        height: req.body.height,
+        weight: req.body.weight,
+        is_female: req.body.is_female,
+        medical_conditions: req.body.medical_conditions
     })
 
     user.save().then(() => {
@@ -124,6 +130,7 @@ app.post("/updateUser", (req, res) => {
     User.findOneAndUpdate({
         _id: req.get("id")
     }, {
+        subject_id: req.get("subject_id"),
         name: req.get("name"),
         age: req.get("age"),
         height: req.get("height"),
