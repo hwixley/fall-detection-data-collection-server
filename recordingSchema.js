@@ -8,7 +8,14 @@ var recording = new Schema({
     fall_type: String,
     recording_duration: Number,
     ground_time: Number,
+    action: String,
+    phone_placement: String,
     p_ecg: [Number],
+    p_hr: [Number],
+    p_hr_rrs: [Number],
+    p_hr_rrsms: [Number],
+    p_hr_rrs_peak: [Number],
+    p_hr_rrsms_peak: [Number],
     p_acc_x: [Number],
     p_acc_y: [Number],
     p_acc_z: [Number],
@@ -27,7 +34,8 @@ var recording = new Schema({
     att_roll: [Number],
     att_pitch: [Number],
     att_yaw: [Number],
-    delta_heading: [Number]
+    delta_heading: [Number],
+    timestamps: [Number]
 })
 
 const Recording = mongoose.model("Recording", recording)

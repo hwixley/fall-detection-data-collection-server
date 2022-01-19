@@ -29,7 +29,14 @@ app.post("/createRecording", jsonParser, (req, res) => {
         fall_type: req.body.fall_type,
         recording_duration: req.body.recording_duration,
         ground_time: req.body.ground_time,
+        action: req.body.action,
+        phone_placement: req.body.phone_placement,
         p_ecg: req.body.p_ecg,
+        p_hr: req.body.p_hr,
+        p_hr_rss: req.body.p_hr_rss,
+        p_hr_rssms: req.body.p_hr_rssms,
+        p_hr_rss_peak: req.body.p_hr_rss_peak,
+        p_hr_rssms_peak: req.body.p_hr_rssms_peak,
         p_acc_x: req.body.p_acc_x,
         p_acc_y: req.body.p_acc_y,
         p_acc_z: req.body.p_acc_z,
@@ -48,7 +55,8 @@ app.post("/createRecording", jsonParser, (req, res) => {
         att_roll: req.body.att_roll,
         att_pitch: req.body.att_pitch,
         att_yaw: req.body.att_yaw,
-        delta_heading: req.body.delta_heading
+        delta_heading: req.body.delta_heading,
+        timestamps: req.body.timestamps
     })
 
     recording.save().then(() => {
