@@ -2,6 +2,7 @@ var mongoose = require("mongoose")
 var Schema = mongoose.Schema
 
 var user = new Schema({
+    subject_id: String,
     name: String,
     age: Number,
     height: Number,
