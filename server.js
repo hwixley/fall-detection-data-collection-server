@@ -161,9 +161,33 @@ app.get("/fetchRecordings", (req, res) => {
     })
 })
 
+app.get("/fetchNumRecordings", (req, res) => {
+    Recording.count( {}, (err, result) => {
+        if (err) {
+            console.log("Failed to perform /fetchNumRecordings: " + err)
+            res.send("fail")
+        } else {
+            console.log("Successfully fetched number of recordings!")
+            res.json(result)
+        }
+    })
+})
+
 app.get("/fetchUsers", (req, res) => {
     User.find({}).then((DBitems) => {
         res.send(DBitems)
+    })
+})
+
+app.get("/fetchNumUsers", (req, res) => {
+    User.count( {}, (err, result) => {
+        if (err) {
+            console.log("Failed to perform /fetchNumUsers: " + err)
+            res.send("fail")
+        } else {
+            console.log("Successfully fetched number of users!")
+            res.json(result)
+        }
     })
 })
 
