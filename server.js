@@ -59,11 +59,11 @@ app.post("/createRecording", jsonParser, (req, res) => {
 
     recording.save().then(() => {
         if (recording.isNew == false) {
-            console.log("Successfully saved!")
+            console.log("Successfully saved recording!")
             res.send(recording._id)
         } else {
-            console.log("Failed to save")
-            res.send("failure")
+            console.log("Failed to /saveRecording")
+            res.send("fail")
         }
     })
 })
@@ -81,11 +81,11 @@ app.post("/createUser", jsonParser, (req, res) => {
 
     user.save().then(() => {
         if (user.isNew == false) {
-            console.log("Successfully saved!")
+            console.log("Successfully saved user!")
             res.send(user._id)
         } else {
-            console.log("Failed to save")
-            res.send("failure")
+            console.log("Failed to /saveUser")
+            res.send("fail")
         }
     })
 })
@@ -121,14 +121,14 @@ app.post("/updateRecording", (req, res) => {
         att_yaw: req.get("att_yaw"),
         delta_heading: req.get("delta_heading")
     }, (err) => {
-        if (err != null) {
-            console.log("Failed to update " + err)
+        if (err) {
+            console.log("Failed to /updateRecording: " + err)
+            res.send("fail")
         } else {
-            console.log("Successfully updated!")
+            console.log("Successfully updated recording!")
+            res.send("success")
         }
     })
-
-    res.send("Updated!")
 })
 
 app.post("/updateUser", (req, res) => {
@@ -143,14 +143,14 @@ app.post("/updateUser", (req, res) => {
         is_female: req.get("is_female"),
         medical_conditions: req.get("medical_conditions")
     }, (err) => {
-        if (err != null) {
-            console.log("Failed to update " + err)
+        if (err) {
+            console.log("Failed to /updateUser: " + err)
+            res.send("fail")
         } else {
-            console.log("Successfully updated!")
+            console.log("Successfully updated user!")
+            res.send("success")
         }
     })
-
-    res.send("Updated!")
 })
 
 
@@ -173,24 +173,14 @@ app.get("/fetchUser", (req, res) => {
     User.find({
         subject_id: req.get("subject_id")
     }, (err, user) => {
-        if (err != null) {
+        if (err) {
             console.log("Failed to /fetchUser: " + err)
+            res.send("fail")
         } else {
             console.log("Successfully fetched user!")
             res.send(user)
         }
     })
-
-    /*User.findById({
-        _id: req.get("id")
-    }, (err, user) => {
-        if (err != null) {
-            console.log("Failed to /fetchUser: " + err)
-        } else {
-            console.log("Successfully fetched user!")
-            res.send(user)
-        }
-    })*/
 })
 
 
@@ -199,28 +189,28 @@ app.post("/deleteRecording", (req, res) => {
     Recording.findOneAndRemove({
         _id: req.get("id")
     }, (err) => {
-        if (err != null) {
-            console.log("Failed to delete " + err)
+        if (err) {
+            console.log("Failed to /deleteRecording: " + err)
+            res.send("fail")
         } else {
-            console.log("Successfully deleted!")
+            console.log("Successfully deleted recording!")
+            res.send("success")
         }
     })
-
-    res.send("Deleted!")
 })
 
 app.post("/deleteUser", (req, res) => {
     User.findOneAndRemove({
         _id: req.get("id")
     }, (err) => {
-        if (err != null) {
-            console.log("Failed to delete " + err)
+        if (err) {
+            console.log("Failed to /deleteUser: " + err)
+            res.send("fail")
         } else {
-            console.log("Successfully deleted!")
+            console.log("Successfully deleted user!")
+            res.send("success")
         }
     })
-
-    res.send("Deleted!")
 })
 
 
