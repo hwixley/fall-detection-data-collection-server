@@ -1,6 +1,7 @@
 const express = require("express")
 const mongoose = require("mongoose")
 var bodyParser = require("body-parser")
+var accessControl = require("express-ip-access-control")
 const Recording = require("./recordingSchema")
 const User = require("./userSchema")
 var app = express()
@@ -8,11 +9,30 @@ var app = express()
 const ip = "192.168.8.160"
 const port = 8081
 
-app.use(bodyParser.json({limit: '50mb'}))
+// Firewall
+const whitelist = ["192.168.8.160", "192.168.8.171"]
+var options = {
+    mode: 'allow',
+    denys: [],
+    allows: whitelist,
+    forceConnectionAddress: false,
+    log: (clientIp, access) => {
+        console.log(clientIp + (access ? " accessed." : " denied."));
+    },
+    statusCode: 401,
+    redirectTo: "",
+    message: "Unauthorized"
+}
+var middleware = accessControl(options)
+app.use(accessControl(options));
+
+// Add bodyParser for sending recordings
+app.use(bodyParser.json({limit: '50mb'}));
 
 var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
+// Connect to the DB
 mongoose.connect("mongodb://127.0.0.1/fddg")
 
 mongoose.connection.once("open", () => {
@@ -21,6 +41,7 @@ mongoose.connection.once("open", () => {
     console.log("Failed to connect " + error)
 })
 
+// SERVER ROUTES:
 
 // CREATE
 app.post("/createRecording", jsonParser, (req, res) => {
@@ -237,6 +258,12 @@ app.post("/deleteUser", (req, res) => {
     })
 })
 
+// Error handler
+app.use((err, req, res, next) => {
+    console.log("Error handler", err);
+    res.statusCode(err.statusCode || 500);
+    res.send("Something broke");
+})
 
 // http://IPv4:port/create
 var server = app.listen(port, ip, () => {
