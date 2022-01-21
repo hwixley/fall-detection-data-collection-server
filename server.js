@@ -1,16 +1,24 @@
-const express = require("express")
-const mongoose = require("mongoose")
-var bodyParser = require("body-parser")
-var accessControl = require("express-ip-access-control")
-const Recording = require("./recordingSchema")
-const User = require("./userSchema")
-var app = express()
+const express = require("express");
+const mongoose = require("mongoose");
+const https = require("https");
+const fs = require("fs");
+var bodyParser = require("body-parser");
+var accessControl = require("express-ip-access-control");
+const Recording = require("./recordingSchema");
+const User = require("./userSchema");
+var app = express();
 
-const ip = "192.168.8.160"
-const port = 8081
+const ip = "192.168.8.160";
+const port = 8081;
+
+// HTTPS CONNECTION
+const websec = {
+    key: fs.readFileSync("key.pem"),
+    cert: fs.readFileSync("cert.pem")
+};
 
 // Firewall
-const whitelist = ["192.168.8.160", "192.168.8.171"]
+const whitelist = ["192.168.8.160", "192.168.8.171"];
 var options = {
     mode: 'allow',
     denys: [],
@@ -23,7 +31,7 @@ var options = {
     redirectTo: "",
     message: "Unauthorized"
 }
-var middleware = accessControl(options)
+var middleware = accessControl(options);
 app.use(accessControl(options));
 
 // Add bodyParser for sending recordings
@@ -266,6 +274,10 @@ app.use((err, req, res, next) => {
 })
 
 // http://IPv4:port/create
-var server = app.listen(port, ip, () => {
+/*var server = app.listen(port, ip, () => {
     console.log("Server is running!")
+})*/
+
+https.createServer(websec, app).listen(port, ip, () => {
+    console.log("server is running!");
 })
