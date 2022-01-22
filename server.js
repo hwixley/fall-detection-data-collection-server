@@ -18,7 +18,7 @@ const websec = {
 };
 
 // Firewall
-const whitelist = ["192.168.8.160", "192.168.8.171"];
+const whitelist = [ip, "192.168.8.147"];
 var options = {
     mode: 'allow',
     denys: [],
