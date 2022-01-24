@@ -10,15 +10,16 @@ var app = express();
 
 const ip = "192.168.8.160";
 const port = 8081;
+const httpsPort = 8080;
 
 // HTTPS CONNECTION
 const websec = {
-    key: fs.readFileSync("key.pem"),
-    cert: fs.readFileSync("cert.pem")
+    key: fs.readFileSync("key1.pem"),
+    cert: fs.readFileSync("cert1.pem")
 };
 
 // Firewall
-const whitelist = [ip, "192.168.8.147"];
+const whitelist = [ip, "192.168.8.147", "192.168.8.105"];
 var options = {
     mode: 'allow',
     denys: [],
@@ -274,10 +275,11 @@ app.use((err, req, res, next) => {
 })
 
 // http://IPv4:port/create
-/*var server = app.listen(port, ip, () => {
-    console.log("Server is running!")
-})*/
-
-https.createServer(websec, app).listen(port, ip, () => {
-    console.log("server is running!");
+var server = app.listen(port, ip, () => {
+    console.log("HTTP server is running!")
 })
+
+https.createServer(websec, app).listen(httpsPort, ip, () => {
+    console.log("HTTPS server is running!");
+})
+
