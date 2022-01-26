@@ -52,6 +52,10 @@ mongoose.connection.once("open", () => {
 
 // SERVER ROUTES:
 
+app.head("/ping", (req, res) => {
+    res.send("success");
+});
+
 // CREATE
 app.post("/createRecording", jsonParser, (req, res) => {
     var recording = new Recording({
