@@ -8,7 +8,7 @@ const Recording = require("./recordingSchema");
 const User = require("./userSchema");
 var app = express();
 
-const ip = "192.168.8.160";
+const ip = "172.20.10.6"; //"192.168.8.160";
 const port = 8081;
 const httpsPort = 8080;
 
@@ -19,7 +19,7 @@ const websec = {
 };
 
 // Firewall
-const whitelist = [ip, "192.168.8.147", "192.168.8.105"];
+const whitelist = [ip, "192.168.8.147", "192.168.8.105", "172.20.10.1"];
 var options = {
     mode: 'allow',
     denys: [],
@@ -53,6 +53,7 @@ mongoose.connection.once("open", () => {
 // SERVER ROUTES:
 
 app.head("/ping", (req, res) => {
+    console.log("pinged")
     res.send("success");
 });
 
