@@ -102,7 +102,7 @@ app.post("/createUser", jsonParser, (req, res) => {
     var user = new User({
         subject_id: req.body.subject_id,
         name: req.body.name,
-        age: req.body.age,
+        yob: req.body.yob,
         height: req.body.height,
         weight: req.body.weight,
         is_female: req.body.is_female,
@@ -167,7 +167,7 @@ app.post("/updateUser", (req, res) => {
     }, {
         subject_id: req.get("subject_id"),
         name: req.get("name"),
-        age: req.get("age"),
+        yob: req.get("yob"),
         height: req.get("height"),
         weight: req.get("weight"),
         is_female: req.get("is_female"),

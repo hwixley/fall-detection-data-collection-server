@@ -4,7 +4,7 @@ var Schema = mongoose.Schema
 var user = new Schema({
     subject_id: String,
     name: String,
-    age: Number,
+    yob: Number,
     height: Number,
     weight: Number,
     is_female: Boolean,
