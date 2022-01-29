@@ -110,7 +110,7 @@ app.post("/createMeta", jsonParser, (req, res) => {
 
     meta.save().then(() => {
         if (meta.isNew == false) {
-            console.log("Successfully saved metaData!")
+            console.log("Successfully saved metaData with ID:" + meta._id)
             res.send("success")
         } else {
             console.log("Failed to /createMeta")
@@ -132,7 +132,7 @@ app.post("/createUser", jsonParser, (req, res) => {
 
     user.save().then(() => {
         if (user.isNew == false) {
-            console.log("Successfully saved user!")
+            console.log("Successfully saved user " + user.name + " with ID:" + user._id)
             res.send(user._id)
         } else {
             console.log("Failed to /createUser")
