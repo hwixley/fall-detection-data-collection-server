@@ -1,20 +1,20 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const https = require("https");
-const fs = require("fs");
 var bodyParser = require("body-parser");
 var accessControl = require("express-ip-access-control");
-const Recording = require("./recordingSchema");
+var ObjectId = mongoose.Types.ObjectId ;
+
 const User = require("./userSchema");
 const Chunk = require("./recordingChunkSchema");
-const Meta = require("./recordingMetaSchema")
+const Meta = require("./recordingMetaSchema");
+
 var app = express();
 
 const ip = "192.168.8.160";
 const port = 8081;
 
 // Firewall
-const whitelist = [ip, "192.168.8.147", "192.168.8.105"];
+const whitelist = [ip, "192.168.8.185"];
 var options = {
     mode: 'allow',
     denys: [],
@@ -53,15 +53,12 @@ app.head("/ping", (req, res) => {
 });
 
 // CREATE
-app.post("/createRecording", jsonParser, (req, res) => {
-    var recording = new Recording({
-        subject_id: req.body.subject_id,
-        fall_time: req.body.fall_time,
-        fall_type: req.body.fall_type,
-        recording_duration: req.body.recording_duration,
-        ground_time: req.body.ground_time,
-        action: req.body.action,
-        phone_placement: req.body.phone_placement,
+app.post("/createChunk", jsonParser, (req, res) => {
+    var chunk = new Chunk({
+        _id: req.body._id,
+        recording_id: req.body.recording_id,
+        chunk_index: req.body.chunk_index,
+        labels: req.body.labels,
         p_ecg: req.body.p_ecg,
         p_hr: req.body.p_hr,
         p_contact: req.body.p_contact,
@@ -83,16 +80,35 @@ app.post("/createRecording", jsonParser, (req, res) => {
         att_roll: req.body.att_roll,
         att_pitch: req.body.att_pitch,
         att_yaw: req.body.att_yaw,
-        delta_heading: req.body.delta_heading,
-        timestamps: req.body.timestamps
+        delta_heading: req.body.delta_heading
     })
 
-    recording.save().then(() => {
-        if (recording.isNew == false) {
-            console.log("Successfully saved recording!")
-            res.send(recording._id)
+    chunk.save().then(() => {
+        if (chunk.isNew == false) {
+            console.log("Successfully saved chunk!")
+            res.send("success")
         } else {
-            console.log("Failed to /saveRecording")
+            console.log("Failed to /createChunk")
+            res.send("fail")
+        }
+    })
+})
+
+app.post("/createMeta", jsonParser, (req, res) => {
+    var meta = new Meta({
+        _id: req.body._id,
+        subject_id: req.body.subject_id,
+        phone_placement: req.body.phone_placement,
+        recording_duration: req.body.recording_duration,
+        chunk_ids: req.body.chunk_ids
+    })
+
+    meta.save().then(() => {
+        if (meta.isNew == false) {
+            console.log("Successfully saved metaData!")
+            res.send("success")
+        } else {
+            console.log("Failed to /createMeta")
             res.send("fail")
         }
     })
@@ -114,94 +130,38 @@ app.post("/createUser", jsonParser, (req, res) => {
             console.log("Successfully saved user!")
             res.send(user._id)
         } else {
-            console.log("Failed to /saveUser")
+            console.log("Failed to /createUser")
             res.send("fail")
-        }
-    })
-})
-
-// UPDATE
-app.post("/updateRecording", (req, res) => {
-    Recording.findOneAndUpdate({
-        _id: req.get("id")
-    }, {
-        subject_id: req.get("subject_id"),
-        fall_time: req.get("fall_time"),
-        fall_type: req.get("fall_type"),
-        recording_duration: req.get("recording_duration"),
-        ground_time: req.get("ground_time"),
-        p_ecg: Freq.get("p_ecg"),
-        p_acc_x: req.get("p_acc_x"),
-        p_acc_y: req.get("p_acc_y"),
-        p_acc_z: req.get("p_acc_z"),
-        acc_x: req.get("acc_x"),
-        acc_y: req.get("acc_y"),
-        acc_z: req.get("acc_z"),
-        gyro_x: req.get("gyr_x"),
-        gyro_y: req.get("gyr_y"),
-        gyro_z: req.get("gyr_z"),
-        grav_x: req.get("gra_x"),
-        grav_y: req.get("gra_y"),
-        grav_z: req.get("gra_z"),
-        magn_x: req.get("mag_x"),
-        magn_y: req.get("mag_y"),
-        magn_z: req.get("mag_z"),
-        att_roll: req.get("att_roll"),
-        att_pitch: req.get("att_pitch"),
-        att_yaw: req.get("att_yaw"),
-        delta_heading: req.get("delta_heading")
-    }, (err) => {
-        if (err) {
-            console.log("Failed to /updateRecording: " + err)
-            res.send("fail")
-        } else {
-            console.log("Successfully updated recording!")
-            res.send("success")
-        }
-    })
-})
-
-app.post("/updateUser", (req, res) => {
-    User.findOneAndUpdate({
-        _id: req.get("id")
-    }, {
-        subject_id: req.get("subject_id"),
-        name: req.get("name"),
-        yob: req.get("yob"),
-        height: req.get("height"),
-        weight: req.get("weight"),
-        is_female: req.get("is_female"),
-        medical_conditions: req.get("medical_conditions")
-    }, (err) => {
-        if (err) {
-            console.log("Failed to /updateUser: " + err)
-            res.send("fail")
-        } else {
-            console.log("Successfully updated user!")
-            res.send("success")
         }
     })
 })
 
 
 // FETCH
-app.get("/fetchRecordings", (req, res) => {
-    Recording.find({}).then((DBitems) => {
+app.get("/fetchChunks", (req, res) => {
+    Chunk.find({}).then((DBitems) => {
         res.send(DBitems)
     })
 })
 
-app.get("/fetchNumRecordings", (req, res) => {
-    Recording.count( {}, (err, result) => {
+app.get("/fetchNumChunks", (req, res) => {
+    Chunk.count( {}, (err, result) => {
         if (err) {
-            console.log("Failed to perform /fetchNumRecordings: " + err)
+            console.log("Failed to perform /fetchNumChunks: " + err)
             res.send("fail")
         } else {
-            console.log("Successfully fetched number of recordings!")
+            console.log("Successfully fetched number of chunks!")
             res.json(result)
         }
     })
 })
+
+app.get("/fetchMetas", (req, res) => {
+    Meta.find({}).then((DBitems) => {
+        res.send(DBitems)
+    })
+})
+
 
 app.get("/fetchUsers", (req, res) => {
     User.find({}).then((DBitems) => {
@@ -231,7 +191,11 @@ app.get("/fetchUser", (req, res) => {
             console.log("Failed to /fetchUser: " + err)
             res.send("fail")
         } else {
-            console.log("Successfully fetched user!")
+            if (user.count > 0) {
+                console.log("Successfully fetched user!")
+            } else {
+                console.log("unable to find users with the id " + req.get("subject_id"))
+            }
             res.send(user)
         }
     })
@@ -239,19 +203,41 @@ app.get("/fetchUser", (req, res) => {
 
 
 // DELETE
-app.post("/deleteRecording", (req, res) => {
-    Recording.findOneAndRemove({
-        _id: req.get("id")
+
+app.post("/deleteChunks", (req, res) => {
+    console.log("delete...")
+    Chunk.find({}).then((DBitems) => {
+        for (var i = 0; i < DBitems.count; i++) {
+            Chunk.findOneAndRemove({
+                _id: DBitems[i]._id
+            }, (err) => {
+                if (err) {
+                    console.log("Failed to /deleteChunk " + err)
+                    res.send("fail")
+                } else {
+                    console.log("Successfully deleted chunk!")
+                    res.send("success")
+                }
+            })
+        }
+    })
+})
+
+
+app.post("/deleteChunk", (req, res) => {
+    User.findOneAndRemove({
+        _id: ObjectId(req.get("id").substring(0,11))
     }, (err) => {
         if (err) {
-            console.log("Failed to /deleteRecording: " + err)
+            console.log("Failed to /deleteChunk: " + err)
             res.send("fail")
         } else {
-            console.log("Successfully deleted recording!")
+            console.log("Successfully deleted chunk!")
             res.send("success")
         }
     })
 })
+
 
 app.post("/deleteUser", (req, res) => {
     User.findOneAndRemove({
@@ -278,9 +264,3 @@ app.use((err, req, res, next) => {
 var server = app.listen(port, ip, () => {
     console.log("HTTP server is running!")
 })
-
-/*
-https.createServer(websec, app).listen(httpsPort, ip, () => {
-    console.log("HTTPS server is running!");
-})*/
-
