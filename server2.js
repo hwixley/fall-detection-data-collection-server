@@ -83,15 +83,20 @@ app.post("/createChunk", jsonParser, (req, res) => {
         delta_heading: req.body.delta_heading
     })
 
-    chunk.save().then(() => {
-        if (chunk.isNew == false) {
-            console.log("Successfully saved chunk!")
-            res.send("success")
-        } else {
-            console.log("Failed to /createChunk")
-            res.send("fail")
-        }
-    })
+    if (chunk.isNew) {
+        chunk.save().then(() => {
+            if (chunk.isNew == false) {
+                console.log("Successfully saved chunk " + String(chunk.chunk_index) + " with ID:" + chunk._id)
+                res.send("success")
+            } else {
+                console.log("Failed to /createChunk")
+                res.send("fail")
+            }
+        })
+    } else {
+        console.log("Failed to add duplicate chunk")
+        res.send("duplicate")
+    }
 })
 
 app.post("/createMeta", jsonParser, (req, res) => {
@@ -191,8 +196,9 @@ app.get("/fetchUser", (req, res) => {
             console.log("Failed to /fetchUser: " + err)
             res.send("fail")
         } else {
-            if (user.count > 0) {
+            if (user.length > 0) {
                 console.log("Successfully fetched user!")
+                console.log(user)
             } else {
                 console.log("unable to find users with the id " + req.get("subject_id"))
             }

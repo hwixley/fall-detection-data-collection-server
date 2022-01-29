@@ -2,6 +2,7 @@ var mongoose = require("mongoose")
 var Schema = mongoose.Schema
 
 var chunk = new Schema({
+    creation: {type: Date, default: Date.now},
     _id: String,
     recording_id: String,
     chunk_index: Number,
