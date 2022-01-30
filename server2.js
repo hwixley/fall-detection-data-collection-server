@@ -197,8 +197,7 @@ app.get("/fetchUser", (req, res) => {
             res.send("fail")
         } else {
             if (user.length > 0) {
-                console.log("Successfully fetched user!")
-                console.log(user)
+                console.log("Successfully fetched user " +  user[0].name + " with ID:" + user[0].subject_id)
             } else {
                 console.log("unable to find users with the id " + req.get("subject_id"))
             }
